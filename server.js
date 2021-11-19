@@ -1,45 +1,22 @@
-const express = require("express");
+const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-const path = require('path');
-const { sequelize } = require("./models");
-// const session = require("express-session");
-
-const PORT = process.env.PORT || 3001;
-// Sets up the Express App
-// =============================================================
+const mongoose = require('mongoose');
+const routes = require('./routes');
 const app = express();
+const PORT = process.env.PORT || 3001;
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 app.use(cors());
-// // Requiring our models for syncing
 
-
-// // Sets up the Express app to handle data parsing
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-// Requiring passport as we've configured it
-// const passport = require("./config/passport");
-
-if (process.env.NODE_ENV === 'production') {
-
-    // Handle React routing, return all requests to React app
-    app.use(express.static(__dirname + '/client/build'));
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static('client/build'));
 }
 
-// app.use(session({ secret: "keyboard cat", resave: true, saveUninitialized: true }));
-// app.use(passport.initialize());
-// app.use(passport.session());
+// app.use(routes);
 
-// app.use('/api', require('./routes/api-routes'));
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mongofun")
 
-app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
-
-
-app.listen(PORT, async () => {
-    console.log(`Server up on PORT ${PORT}`);
-    await sequelize.sync();
-    console.log('Database Connected');
+app.listen(PORT, () => {
+    console.log(`API server now listening on PORT ${PORT}!`)
 })
