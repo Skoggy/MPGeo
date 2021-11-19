@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === "production") {
 
 // app.use(routes);
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mongofun")
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mpgeo")
 
 app.listen(PORT, () => {
     console.log(`API server now listening on PORT ${PORT}!`)
